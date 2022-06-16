@@ -1,12 +1,16 @@
+import { 
+    Flex,
+    Box,
+} from "@chakra-ui/react"
+import { Event } from "./event"
 
 export const EventList = (props) => {
     
     return (
-        
-        <ul>
-            {props.events.map((event) => 
-                <li key={event}>{event}</li>
+        <Flex direction="column" gap={4}>
+            {[0,1,2].map((event) => 
+                <Event key={event} index={event} eventList={props.events} />
             )}
-        </ul>
+        </Flex>
     )
 }

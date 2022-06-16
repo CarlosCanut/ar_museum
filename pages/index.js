@@ -1,30 +1,38 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import Link from 'next/link'
-import styles from '../styles/Home.module.css'
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import Head from "next/head";
+import Image from "next/image";
+import Link from "next/link";
+import styles from "../styles/Home.module.css";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
-import { Counter } from '../components/counter'
-import { EventList } from '../components/eventList'
+import { Counter } from "../components/counter";
+import { EventList } from "../components/eventList";
+import { Button } from "@chakra-ui/react";
 
+// export async function getStaticProps() {
+//   const res = await fetch('https://ar-museum-test.azurewebsites.net/api/function_extract?code=QDUxNgsgxUSskI0OzfHK73J7TogrS8EiPSj-qjf08WNvAzFuI2PKFA==')
+//   const events = await res.json()
 
-export async function getStaticProps() {
-  const res = await fetch('https://ar-museum-test.azurewebsites.net/api/function_extract?code=QDUxNgsgxUSskI0OzfHK73J7TogrS8EiPSj-qjf08WNvAzFuI2PKFA==')
-  const events = await res.json()
+//   return {
+//     props: {
+//       events,
+//     },
+//     revalidate: 1,
+//   }
+// }
 
+export default function Home() {
+  const [events, setEvents] = useState([]);
 
-  return {
-    props: {
-      events,
-    },
-    revalidate: 5,
-  }
-}
+  useEffect(() => {
+    (async function () {
+      var new_events = [];
+      const res = await fetch("/api/events");
+      new_events = await res.json();
 
-
-export default function Home({ events }) {
-
+      setEvents(new_events["events"]);
+    })();
+  }, [events]);
 
   return (
     <div className={styles.container}>
@@ -35,26 +43,22 @@ export default function Home({ events }) {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
+        {/* <h1 className={styles.title}>
           AR Museums
-        </h1>
+        </h1> */}
+
+        <Button
+          onClick={() => {
+            fetch("/api/update_session");
+          }}
+          size="lg"
+          m={4}
+        >
+          Start new session
+        </Button>
 
         <EventList events={events} />
-
       </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
     </div>
-  )
+  );
 }

@@ -1,7 +1,7 @@
 export default async function handler(req, res) {
   try {
     const events_raw = await fetch(
-      "https://ar-museum-test.azurewebsites.net/api/function_extract?code=QDUxNgsgxUSskI0OzfHK73J7TogrS8EiPSj-qjf08WNvAzFuI2PKFA=="
+      "https://ar-museum-test.azurewebsites.net/api/session/activate"
     );
     const events = await events_raw.json();
     res.status(200).json({ events });
